@@ -1,0 +1,20 @@
+---
+  - name: installing {{ web_pkg }} package
+    dnf:
+      name: "{{ web_pkg }}"
+      state: present
+  - name: start and enable {{ web_svc }} service
+    service:
+      name: "{{ web_svc }}"
+      state: started
+      enabled: true
+  - name: copyin hcl.txt file
+    copy:
+      src: hcl.txt
+      dest: /home/admin/hcl.txt
+  - name: creating sample webpage using jinja2 template
+    template:
+      src: index.html.j2
+      dest: /var/www/html/index.html
+    notify:
+      - restart apache
